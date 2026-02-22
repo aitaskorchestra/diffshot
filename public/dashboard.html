@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — DiffShot</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    body { background: #0a0e1a; color: #e2e8f0; }
+    .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
+    .gradient-text { background: linear-gradient(135deg, #06b6d4, #8b5cf6, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    pre { overflow-x: auto; max-width: 100%; }
+    code { overflow-x: auto; }
+    .gs-copy-btn { font-size: 12px !important; min-width: 44px; min-height: 44px; }
+  </style>
+</head>
+<body class="min-h-screen">
+  <nav class="fixed top-0 w-full z-50 glass">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold gradient-text py-2">DiffShot</a>
+      <div class="flex items-center gap-4 text-sm text-gray-400">
+        <a href="/" class="hover:text-white transition py-3 px-2 inline-block">Home</a>
+        <a href="/docs.html" class="hover:text-white transition py-3 px-2 inline-block">Docs</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="pt-24 px-4 max-w-4xl mx-auto">
+    <!-- Auth Section -->
+    <div id="authSection">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="glass rounded-xl p-6">
+          <h2 class="text-xl font-bold mb-4">Register</h2>
+          <input id="regEmail" type="email" placeholder="your@email.com" class="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 mb-3">
+          <button id="regBtn" class="w-full px-4 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-medium hover:opacity-90 transition">Get Free API Key</button>
+          <div id="regResult" class="mt-3 text-sm hidden"></div>
+        </div>
+        <div class="glass rounded-xl p-6">
+          <h2 class="text-xl font-bold mb-4">Sign In</h2>
+          <input id="loginKey" type="text" placeholder="Your API key (ds_...)" class="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 mb-3">
+          <button id="loginBtn" class="w-full px-4 py-3 rounded-lg glass text-gray-300 hover:text-white transition font-medium">Sign In</button>
+          <div id="loginResult" class="mt-3 text-sm hidden"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashSection" class="hidden">
+      <div class="glass rounded-xl p-6 mb-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold">Your Account</h2>
+          <button id="logoutBtn" class="text-sm text-gray-500 hover:text-white transition">Sign Out</button>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div><div class="text-gray-500 text-xs">Email</div><div id="dashEmail" class="font-medium truncate"></div></div>
+          <div><div class="text-gray-500 text-xs">Plan</div><div id="dashPlan" class="font-medium capitalize"></div></div>
+          <div><div class="text-gray-500 text-xs">Usage</div><div id="dashUsage" class="font-medium"></div></div>
+          <div><div class="text-gray-500 text-xs">Limit</div><div id="dashLimit" class="font-medium"></div></div>
+        </div>
+      </div>
+
+      <div class="glass rounded-xl p-6 mb-6">
+        <h3 class="text-lg font-bold mb-3">Your API Key</h3>
+        <div class="flex items-center gap-3">
+          <code id="dashKey" class="flex-1 px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-cyan-400 text-sm truncate"></code>
+          <button id="copyBtn" class="px-4 py-3 rounded-lg glass text-gray-300 hover:text-white transition text-sm">Copy</button>
+        </div>
+      </div>
+
+      <!-- Getting Started Guide -->
+      <div id="onboarding" class="glass rounded-xl p-6 mb-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-bold">🚀 Getting Started</h3>
+          <button id="dismissGuide" class="text-xs text-gray-500 hover:text-white transition">Dismiss</button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div class="glass rounded-lg p-4">
+            <div class="text-2xl font-bold text-cyan-400 mb-2">1</div>
+            <div class="font-semibold mb-1">Copy your API key</div>
+            <div class="text-sm text-gray-400">Your key is shown above. Click "Copy" to grab it.</div>
+          </div>
+          <div class="glass rounded-lg p-4">
+            <div class="text-2xl font-bold text-purple-400 mb-2">2</div>
+            <div class="font-semibold mb-1">Make your first diff</div>
+            <div class="text-sm text-gray-400">Use the curl command below to compare two URLs.</div>
+          </div>
+          <div class="glass rounded-lg p-4">
+            <div class="text-2xl font-bold text-pink-400 mb-2">3</div>
+            <div class="font-semibold mb-1">See the result</div>
+            <div class="text-sm text-gray-400">Get diff percentage, changed pixels, and overlay image.</div>
+          </div>
+        </div>
+        <pre class="text-sm text-green-400 bg-white/5 rounded-lg p-4 overflow-x-auto"><code id="dashExample"></code></pre>
+        <div class="mt-3 flex gap-3">
+          <button id="tryItBtn" class="px-4 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-purple-500 text-white text-sm font-medium hover:opacity-90 transition">Try it now</button>
+          <a href="/docs.html" class="px-4 py-3 rounded-lg glass text-gray-300 hover:text-white transition text-sm">Read full docs →</a>
+        </div>
+        <div id="tryResult" class="mt-3 hidden"></div>
+      </div>
+
+      <!-- Upgrade -->
+      <div id="upgradeSection" class="glass rounded-xl p-6 hidden">
+        <h3 class="text-lg font-bold mb-3">Upgrade Plan</h3>
+        <p class="text-gray-400 text-sm mb-4">Need more diffs? Upgrade your plan.</p>
+        <div class="flex gap-3">
+          <button onclick="upgrade('starter')" class="px-4 py-3 rounded-lg glass text-gray-300 hover:text-white transition text-sm">Starter $9/mo</button>
+          <button onclick="upgrade('pro')" class="px-4 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-medium hover:opacity-90 transition">Pro $29/mo</button>
+          <button onclick="upgrade('business')" class="px-4 py-3 rounded-lg glass text-gray-300 hover:text-white transition text-sm">Business $79/mo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = '';
+    let currentKey = localStorage.getItem('ds_key') || '';
+
+    if (currentKey) loadDashboard(currentKey);
+
+    document.getElementById('regBtn').addEventListener('click', async () => {
+      const email = document.getElementById('regEmail').value;
+      const r = document.getElementById('regResult');
+      try {
+        const res = await fetch(API + '/v1/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) });
+        const data = await res.json();
+        r.classList.remove('hidden');
+        if (data.success) {
+          r.className = 'mt-3 text-sm text-green-400';
+          r.innerHTML = `API Key: <code class="text-cyan-400">${data.api_key}</code><br><small>Save this key! You need it to sign in.</small>`;
+          localStorage.setItem('ds_key', data.api_key);
+          currentKey = data.api_key;
+          setTimeout(() => loadDashboard(currentKey), 1500);
+        } else {
+          r.className = 'mt-3 text-sm text-red-400';
+          r.textContent = data.error;
+        }
+      } catch (e) { r.className = 'mt-3 text-sm text-red-400'; r.textContent = e.message; r.classList.remove('hidden'); }
+    });
+
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+      const key = document.getElementById('loginKey').value;
+      const r = document.getElementById('loginResult');
+      try {
+        const res = await fetch(API + '/v1/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key }) });
+        const data = await res.json();
+        r.classList.remove('hidden');
+        if (data.success) {
+          localStorage.setItem('ds_key', key);
+          currentKey = key;
+          loadDashboard(key);
+        } else {
+          r.className = 'mt-3 text-sm text-red-400';
+          r.textContent = data.error;
+        }
+      } catch (e) { r.className = 'mt-3 text-sm text-red-400'; r.textContent = e.message; r.classList.remove('hidden'); }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('ds_key');
+      currentKey = '';
+      document.getElementById('authSection').classList.remove('hidden');
+      document.getElementById('dashSection').classList.add('hidden');
+    });
+
+    document.getElementById('copyBtn').addEventListener('click', () => {
+      navigator.clipboard.writeText(currentKey);
+      document.getElementById('copyBtn').textContent = 'Copied!';
+      setTimeout(() => document.getElementById('copyBtn').textContent = 'Copy', 2000);
+    });
+
+    async function loadDashboard(key) {
+      try {
+        const res = await fetch(API + '/v1/account', { headers: { 'x-api-key': key } });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.error);
+
+        document.getElementById('authSection').classList.add('hidden');
+        document.getElementById('dashSection').classList.remove('hidden');
+        document.getElementById('dashEmail').textContent = data.user.email;
+        document.getElementById('dashPlan').textContent = data.user.plan;
+        document.getElementById('dashUsage').textContent = data.user.usage_this_month;
+        document.getElementById('dashLimit').textContent = data.user.monthly_limit;
+        document.getElementById('dashKey').textContent = key;
+        document.getElementById('dashExample').textContent = `curl -X POST "https://diffshot.grabshot.dev/v1/diff" \\\n  -H "x-api-key: ${key}" \\\n  -H "Content-Type: application/json" \\\n  -d '{"url1":"https://example.com","url2":"https://example.org"}'`;
+        // Show/hide onboarding
+        const dismissed = localStorage.getItem('ds_guide_dismissed');
+        if (dismissed) document.getElementById('onboarding')?.classList.add('hidden');
+        // Show upgrade for free users
+        if (data.user.plan === 'free') document.getElementById('upgradeSection')?.classList.remove('hidden');
+      } catch (e) {
+        localStorage.removeItem('ds_key');
+        document.getElementById('authSection').classList.remove('hidden');
+        document.getElementById('dashSection').classList.add('hidden');
+      }
+    }
+
+    // Dismiss guide
+    document.getElementById('dismissGuide')?.addEventListener('click', () => {
+      document.getElementById('onboarding').classList.add('hidden');
+      localStorage.setItem('ds_guide_dismissed', '1');
+    });
+
+    // Try it now
+    document.getElementById('tryItBtn')?.addEventListener('click', async () => {
+      const r = document.getElementById('tryResult');
+      r.classList.remove('hidden');
+      r.className = 'mt-3 text-sm text-gray-400';
+      r.textContent = 'Running diff...';
+      try {
+        const res = await fetch(API + '/v1/diff', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-api-key': currentKey },
+          body: JSON.stringify({ url1: 'https://example.com', url2: 'https://example.org' })
+        });
+        const data = await res.json();
+        if (data.success) {
+          r.className = 'mt-3 text-sm text-green-400';
+          r.innerHTML = `✅ Diff complete! Changed pixels: ${data.diff.changedPixels}, Diff: ${data.diff.diffPercent}%`;
+        } else {
+          r.className = 'mt-3 text-sm text-red-400';
+          r.textContent = data.error;
+        }
+      } catch (e) { r.className = 'mt-3 text-sm text-red-400'; r.textContent = e.message; }
+    });
+
+    // Upgrade
+    async function upgrade(plan) {
+      try {
+        const res = await fetch(API + '/v1/billing/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-api-key': currentKey },
+          body: JSON.stringify({ plan })
+        });
+        const data = await res.json();
+        if (data.url) window.location.href = data.url;
+      } catch (e) { alert('Error: ' + e.message); }
+    }
+
+    // Attribution
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get('ref') || params.get('utm_source');
+    if (ref) localStorage.setItem('ds_ref', ref);
+  </script>
+<section class="border-t border-gray-800"><div id="grabshot-apps" data-exclude="DiffShot" data-title="More Developer Tools from GrabShot"></div><script src="/widget/app-list.js" async></script></section><script src="/widget/copy-btn.js" async></script>
+</body>
+</html>

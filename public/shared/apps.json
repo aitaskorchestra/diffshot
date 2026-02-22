@@ -1,0 +1,46 @@
+{
+  "apps": [
+    {
+      "name": "GrabShot",
+      "url": "https://grabshot.dev",
+      "description": "Screenshot API with device frames & AI cleanup",
+      "icon": "📸",
+      "color": "#3b82f6"
+    },
+    {
+      "name": "PDFMagic",
+      "url": "https://pdf.grabshot.dev",
+      "description": "HTML & URL to pixel-perfect PDF",
+      "icon": "📄",
+      "color": "#f97316"
+    },
+    {
+      "name": "MetaPeek",
+      "url": "https://metapeek.grabshot.dev",
+      "description": "Link preview & meta tag extraction",
+      "icon": "🔍",
+      "color": "#8b5cf6"
+    },
+    {
+      "name": "ColorPeek",
+      "url": "https://colorpeek.grabshot.dev",
+      "description": "Extract color palettes from any website or image",
+      "icon": "🎨",
+      "color": "#ec4899"
+    },
+    {
+      "name": "CronPing",
+      "url": "https://cronping.grabshot.dev",
+      "description": "Uptime monitoring & cron heartbeat API",
+      "icon": "⏰",
+      "color": "#10b981"
+    },
+    {
+      "name": "MailForge",
+      "url": "https://mailforge.grabshot.dev",
+      "description": "HTML email testing & preview API",
+      "icon": "✉️",
+      "color": "#6366f1"
+    }
+  ]
+}

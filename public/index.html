@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DiffShot — Visual Diff & Comparison API for Websites</title>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"DiffShot","applicationCategory":"DeveloperApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+  <meta name="description" content="Compare screenshots of any two URLs and get a visual diff highlighting what changed. Perfect for visual regression testing, QA, and monitoring.">
+  <link rel="canonical" href="https://diffshot.grabshot.dev">
+  <meta property="og:title" content="DiffShot — Visual Diff & Comparison API">
+  <meta property="og:description" content="Compare screenshots of websites. Get pixel-level visual diffs via API.">
+  <meta property="og:image" content="https://grabshot.dev/v1/screenshot?url=https%3A%2F%2Fdiffshot.grabshot.dev&og=ogk_36e2af8c7c67acbb00f8f1629a5984bd&frame=browser&width=1200&height=630">
+  <meta property="og:url" content="https://diffshot.grabshot.dev">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DiffShot — Visual Diff & Comparison API">
+  <meta name="twitter:description" content="Compare screenshots of websites. Get pixel-level visual diffs via API.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    body { background: #0a0e1a; color: #e2e8f0; }
+    .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
+    .gradient-text { background: linear-gradient(135deg, #06b6d4, #8b5cf6, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    pre { overflow-x: auto; max-width: 100%; }
+    code { overflow-x: auto; }
+    .gs-copy-btn { font-size: 12px !important; min-width: 44px; min-height: 44px; }
+  </style>
+<script src="https://stats.grabshot.dev/t.js" defer></script>
+</head>
+<body class="min-h-screen">
+  <!-- Nav -->
+  <nav class="fixed top-0 w-full z-50 glass">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold gradient-text py-2">DiffShot</a>
+      <div class="hidden md:flex items-center gap-6 text-sm text-gray-400">
+        <a href="#features" class="hover:text-white transition py-3 px-1">Features</a>
+        <a href="#demo" class="hover:text-white transition py-3 px-1">Demo</a>
+        <a href="#pricing" class="hover:text-white transition py-3 px-1">Pricing</a>
+        <a href="/docs.html" class="hover:text-white transition py-3 px-2">Docs</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="/dashboard.html" class="text-sm px-4 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-medium hover:opacity-90 transition">Get API Key</a>
+        <button id="menuBtn" class="md:hidden text-gray-400 hover:text-white p-2 min-w-[44px] min-h-[44px] flex items-center justify-center">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="pt-32 pb-20 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl md:text-6xl font-extrabold mb-6">
+        <span class="gradient-text">Visual Diffs</span><br>
+        for Any Website
+      </h1>
+      <p class="text-lg md:text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+        Compare two URLs or track changes over time. Get pixel-level visual diffs with change percentage — perfect for regression testing, QA, and monitoring.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+        <a href="/dashboard.html" class="px-8 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-semibold hover:opacity-90 transition">Start Free</a>
+        <a href="#demo" class="px-8 py-3 rounded-lg glass text-gray-300 font-semibold hover:text-white transition">Try Demo</a>
+      </div>
+      <div class="glass rounded-xl p-4 text-left max-w-2xl mx-auto">
+        <div class="text-xs text-gray-500 mb-2">Quick example</div>
+        <pre class="text-sm text-green-400"><code>curl -X POST "https://diffshot.grabshot.dev/v1/diff" \
+  -H "x-api-key: YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"url1":"https://example.com","url2":"https://example.org"}'</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="py-20 px-4">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold text-center mb-12">What You Get</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="glass rounded-xl p-6">
+          <div class="text-3xl mb-3">🔍</div>
+          <h3 class="text-lg font-semibold mb-2">Pixel-Level Diffs</h3>
+          <p class="text-gray-400 text-sm">Compare any two web pages at the pixel level. Changed areas are highlighted in red for instant visibility.</p>
+        </div>
+        <div class="glass rounded-xl p-6">
+          <div class="text-3xl mb-3">📊</div>
+          <h3 class="text-lg font-semibold mb-2">Change Statistics</h3>
+          <p class="text-gray-400 text-sm">Get exact percentage of pixels changed, total changed pixels, and image dimensions. Quantify visual regression.</p>
+        </div>
+        <div class="glass rounded-xl p-6">
+          <div class="text-3xl mb-3">📸</div>
+          <h3 class="text-lg font-semibold mb-2">Screenshot API</h3>
+          <p class="text-gray-400 text-sm">Take screenshots of any URL and use them as baselines for future comparisons. Build your own monitoring pipeline.</p>
+        </div>
+        <div class="glass rounded-xl p-6">
+          <div class="text-3xl mb-3">⚡</div>
+          <h3 class="text-lg font-semibold mb-2">Fast & Reliable</h3>
+          <p class="text-gray-400 text-sm">Powered by headless Chromium. Screenshots render just like a real browser with full JS execution.</p>
+        </div>
+        <div class="glass rounded-xl p-6">
+          <div class="text-3xl mb-3">🔗</div>
+          <h3 class="text-lg font-semibold mb-2">Baseline Comparison</h3>
+          <p class="text-gray-400 text-sm">Pass a base64 baseline image + URL to compare against a known good state. Perfect for CI/CD integration.</p>
+        </div>
+        <div class="glass rounded-xl p-6">
+          <div class="text-3xl mb-3">🎯</div>
+          <h3 class="text-lg font-semibold mb-2">Simple JSON API</h3>
+          <p class="text-gray-400 text-sm">RESTful API returns diff images as base64, change stats, and metadata. Easy to integrate anywhere.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Demo -->
+  <section id="demo" class="py-20 px-4">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl font-bold text-center mb-4">Live Demo</h2>
+      <p class="text-gray-400 text-center mb-8">Enter two URLs to compare, or try the demo with example sites.</p>
+      <div class="glass rounded-xl p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <input id="demoUrl1" type="url" placeholder="First URL (e.g. https://example.com)" class="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500">
+          <input id="demoUrl2" type="url" placeholder="Second URL (e.g. https://example.org)" class="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500">
+        </div>
+        <button id="demoBtn" class="w-full px-6 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-semibold hover:opacity-90 transition">Compare Screenshots</button>
+        <div id="demoResult" class="mt-6 hidden">
+          <div id="demoStats" class="mb-4 text-center"></div>
+          <div class="rounded-lg overflow-hidden border border-white/10">
+            <img id="demoDiffImg" class="w-full" alt="Visual diff result">
+          </div>
+        </div>
+        <div id="demoLoading" class="mt-6 hidden text-center text-gray-400">
+          <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-400 mr-3"></div>
+          Taking screenshots and computing diff... (10-20s)
+        </div>
+        <div id="demoError" class="mt-4 hidden text-red-400 text-center"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="py-20 px-4">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-3xl font-bold text-center mb-12">Simple Pricing</h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="glass rounded-xl p-6 text-center flex flex-col">
+          <h3 class="text-lg font-bold mb-2">Free</h3>
+          <div class="text-3xl font-extrabold mb-1">$0</div>
+          <div class="text-gray-500 text-sm mb-4">30 diffs/month</div>
+          <ul class="text-sm text-gray-400 space-y-2 mb-6 text-left flex-1">
+            <li>✓ Visual diff API</li>
+            <li>✓ Screenshot API</li>
+            <li>✓ Base64 output</li>
+          </ul>
+          <a href="/dashboard.html?plan=free" class="block px-4 py-3 rounded-lg glass text-gray-300 hover:text-white transition text-sm font-medium mt-auto">Get Started</a>
+        </div>
+        <div class="glass rounded-xl p-6 text-center border border-cyan-500/30 flex flex-col">
+          <h3 class="text-lg font-bold mb-2">Starter</h3>
+          <div class="text-3xl font-extrabold mb-1">$9</div>
+          <div class="text-gray-500 text-sm mb-4">500 diffs/month</div>
+          <ul class="text-sm text-gray-400 space-y-2 mb-6 text-left flex-1">
+            <li>✓ Everything in Free</li>
+            <li>✓ Higher rate limits</li>
+            <li>✓ Priority support</li>
+          </ul>
+          <a href="/dashboard.html?plan=starter" class="block px-4 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-purple-500 text-white text-sm font-medium hover:opacity-90 transition mt-auto">Subscribe</a>
+        </div>
+        <div class="glass rounded-xl p-6 text-center border border-purple-500/30 flex flex-col">
+          <div class="text-xs font-bold text-purple-400 mb-2">MOST POPULAR</div>
+          <h3 class="text-lg font-bold mb-2">Pro</h3>
+          <div class="text-3xl font-extrabold mb-1">$29</div>
+          <div class="text-gray-500 text-sm mb-4">5,000 diffs/month</div>
+          <ul class="text-sm text-gray-400 space-y-2 mb-6 text-left flex-1">
+            <li>✓ Everything in Starter</li>
+            <li>✓ Custom viewports</li>
+            <li>✓ Webhook notifications</li>
+          </ul>
+          <a href="/dashboard.html?plan=pro" class="block px-4 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-medium hover:opacity-90 transition mt-auto">Subscribe</a>
+        </div>
+        <div class="glass rounded-xl p-6 text-center flex flex-col">
+          <h3 class="text-lg font-bold mb-2">Business</h3>
+          <div class="text-3xl font-extrabold mb-1">$79</div>
+          <div class="text-gray-500 text-sm mb-4">50,000 diffs/month</div>
+          <ul class="text-sm text-gray-400 space-y-2 mb-6 text-left flex-1">
+            <li>✓ Everything in Pro</li>
+            <li>✓ Dedicated support</li>
+            <li>✓ SLA guarantee</li>
+          </ul>
+          <a href="/dashboard.html?plan=business" class="block px-4 py-3 rounded-lg glass text-gray-300 hover:text-white transition text-sm font-medium mt-auto">Subscribe</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 px-4 border-t border-white/5">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+      <span class="gradient-text font-bold">DiffShot</span>
+      <div class="flex gap-6">
+        <a href="/docs.html" class="hover:text-white transition py-3 px-2 inline-block">Docs</a>
+        <a href="/dashboard.html" class="hover:text-white transition py-3 px-2 inline-block">Dashboard</a>
+      </div>
+      <a href="mailto:hello@grabshot.dev" class="hover:text-white transition py-3 inline-block">hello@grabshot.dev</a>
+      <span>© 2026 GrabShot</span>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('menuBtn')?.addEventListener('click', () => {
+      document.getElementById('mobileMenu')?.classList.toggle('hidden');
+    });
+
+    document.getElementById('demoBtn').addEventListener('click', async () => {
+      const url1 = document.getElementById('demoUrl1').value || 'https://example.com';
+      const url2 = document.getElementById('demoUrl2').value || 'https://www.iana.org/domains/reserved';
+      const btn = document.getElementById('demoBtn');
+      const loading = document.getElementById('demoLoading');
+      const result = document.getElementById('demoResult');
+      const error = document.getElementById('demoError');
+
+      btn.disabled = true;
+      btn.textContent = 'Comparing...';
+      loading.classList.remove('hidden');
+      result.classList.add('hidden');
+      error.classList.add('hidden');
+
+      try {
+        const res = await fetch(`/v1/demo/diff?url1=${encodeURIComponent(url1)}&url2=${encodeURIComponent(url2)}`);
+        const data = await res.json();
+        if (!data.success) throw new Error(data.error);
+
+        document.getElementById('demoStats').innerHTML = `
+          <span class="text-2xl font-bold text-cyan-400">${data.diff.diffPercent}%</span>
+          <span class="text-gray-400 ml-2">pixels changed</span>
+          <span class="text-gray-600 ml-4">${data.diff.changedPixels.toLocaleString()} / ${data.diff.totalPixels.toLocaleString()} pixels</span>
+        `;
+        document.getElementById('demoDiffImg').src = data.diff.diffImage;
+        result.classList.remove('hidden');
+      } catch (e) {
+        error.textContent = e.message;
+        error.classList.remove('hidden');
+      } finally {
+        loading.classList.add('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Compare Screenshots';
+      }
+    });
+
+    // Attribution tracking
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get('ref') || params.get('utm_source');
+    if (ref) {
+      fetch('/v1/health').then(() => {
+        document.querySelectorAll('a[href="/dashboard.html"]').forEach(a => {
+          a.href += (a.href.includes('?') ? '&' : '?') + 'ref=' + encodeURIComponent(ref);
+        });
+      });
+    }
+  </script>
+<section class="border-t border-gray-800"><div id="grabshot-apps" data-exclude="DiffShot" data-title="More Developer Tools from GrabShot"></div><script src="/widget/app-list.js" async></script></section><script src="/widget/copy-btn.js" async></script>
+</body>
+</html>

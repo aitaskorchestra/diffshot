@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Docs — DiffShot</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    body { background: #0a0e1a; color: #e2e8f0; }
+    .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
+    .gradient-text { background: linear-gradient(135deg, #06b6d4, #8b5cf6, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    pre { overflow-x: auto; max-width: 100%; }
+    code { overflow-x: auto; }
+    .gs-copy-btn { font-size: 12px !important; min-width: 44px; min-height: 44px; }
+  </style>
+</head>
+<body class="min-h-screen">
+  <nav class="fixed top-0 w-full z-50 glass">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold gradient-text py-2">DiffShot</a>
+      <div class="flex items-center gap-4 text-sm text-gray-400">
+        <a href="/" class="hover:text-white transition py-3 px-2 inline-block">Home</a>
+        <a href="/dashboard.html" class="hover:text-white transition py-3 px-2 inline-block">Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="pt-24 pb-20 px-4 max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-8">API Documentation</h1>
+
+    <div class="space-y-8">
+      <!-- Auth -->
+      <div class="glass rounded-xl p-6">
+        <h2 class="text-xl font-bold mb-3">Authentication</h2>
+        <p class="text-gray-400 mb-3">All API endpoints require an API key. Pass it via the <code class="text-cyan-400">x-api-key</code> header or <code class="text-cyan-400">key</code> query parameter.</p>
+        <pre class="bg-white/5 rounded-lg p-4 text-sm text-green-400"><code>curl -H "x-api-key: ds_your_key_here" https://diffshot.grabshot.dev/v1/screenshot?url=https://example.com</code></pre>
+      </div>
+
+      <!-- POST /v1/diff -->
+      <div class="glass rounded-xl p-6">
+        <h2 class="text-xl font-bold mb-1">POST /v1/diff</h2>
+        <p class="text-gray-500 text-sm mb-3">Compare two URLs or a URL against a baseline image.</p>
+        <h3 class="text-sm font-semibold text-gray-300 mb-2">Request Body (JSON)</h3>
+        <div class="text-sm text-gray-400 space-y-1 mb-4">
+          <div><code class="text-cyan-400">url1</code> + <code class="text-cyan-400">url2</code> — Two URLs to compare</div>
+          <div><strong>OR</strong></div>
+          <div><code class="text-cyan-400">url</code> + <code class="text-cyan-400">baseline</code> — URL + base64 PNG baseline image</div>
+          <div><code class="text-cyan-400">width</code> (optional) — Viewport width, default 1280</div>
+          <div><code class="text-cyan-400">height</code> (optional) — Viewport height, default 800</div>
+        </div>
+        <h3 class="text-sm font-semibold text-gray-300 mb-2">Example</h3>
+        <pre class="bg-white/5 rounded-lg p-4 text-sm text-green-400 mb-4"><code>curl -X POST "https://diffshot.grabshot.dev/v1/diff" \
+  -H "x-api-key: YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"url1":"https://example.com","url2":"https://example.org"}'</code></pre>
+        <h3 class="text-sm font-semibold text-gray-300 mb-2">Response</h3>
+        <pre class="bg-white/5 rounded-lg p-4 text-sm text-gray-300"><code>{
+  "success": true,
+  "diff": {
+    "diffPercent": 42.5,
+    "changedPixels": 435200,
+    "totalPixels": 1024000,
+    "width": 1280,
+    "height": 800,
+    "diffImage": "data:image/png;base64,..."
+  }
+}</code></pre>
+      </div>
+
+      <!-- GET /v1/screenshot -->
+      <div class="glass rounded-xl p-6">
+        <h2 class="text-xl font-bold mb-1">GET /v1/screenshot</h2>
+        <p class="text-gray-500 text-sm mb-3">Take a screenshot of a URL. Useful for creating baselines.</p>
+        <h3 class="text-sm font-semibold text-gray-300 mb-2">Parameters</h3>
+        <div class="text-sm text-gray-400 space-y-1 mb-4">
+          <div><code class="text-cyan-400">url</code> (required) — URL to screenshot</div>
+          <div><code class="text-cyan-400">width</code> (optional) — Viewport width, default 1280</div>
+          <div><code class="text-cyan-400">height</code> (optional) — Viewport height, default 800</div>
+        </div>
+        <pre class="bg-white/5 rounded-lg p-4 text-sm text-green-400"><code>curl "https://diffshot.grabshot.dev/v1/screenshot?url=https://example.com" \
+  -H "x-api-key: YOUR_KEY"</code></pre>
+      </div>
+
+      <!-- Demo -->
+      <div class="glass rounded-xl p-6">
+        <h2 class="text-xl font-bold mb-1">GET /v1/demo/diff</h2>
+        <p class="text-gray-500 text-sm mb-3">No-auth demo endpoint. Compares two example URLs.</p>
+        <pre class="bg-white/5 rounded-lg p-4 text-sm text-green-400"><code>curl "https://diffshot.grabshot.dev/v1/demo/diff"</code></pre>
+      </div>
+
+      <!-- Health -->
+      <div class="glass rounded-xl p-6">
+        <h2 class="text-xl font-bold mb-1">GET /v1/health</h2>
+        <p class="text-gray-500 text-sm mb-3">Health check. No auth required.</p>
+        <pre class="bg-white/5 rounded-lg p-4 text-sm text-green-400"><code>curl "https://diffshot.grabshot.dev/v1/health"</code></pre>
+      </div>
+
+      <!-- User endpoints -->
+      <div class="glass rounded-xl p-6">
+        <h2 class="text-xl font-bold mb-3">User Management</h2>
+        <div class="space-y-3 text-sm text-gray-400">
+          <div><code class="text-cyan-400">POST /v1/register</code> — Register with <code>{"email":"..."}</code></div>
+          <div><code class="text-cyan-400">POST /v1/login</code> — Login with <code>{"key":"ds_..."}</code></div>
+          <div><code class="text-cyan-400">GET /v1/account</code> — Get account info (auth required)</div>
+          <div><code class="text-cyan-400">GET /v1/keys</code> — List API keys (auth required)</div>
+          <div><code class="text-cyan-400">POST /v1/keys</code> — Create new API key (auth required)</div>
+          <div><code class="text-cyan-400">DELETE /v1/keys/:id</code> — Revoke an API key (auth required)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+<section class="border-t border-gray-800"><div id="grabshot-apps" data-exclude="DiffShot" data-title="More Developer Tools from GrabShot"></div><script src="/widget/app-list.js" async></script></section><script src="/widget/copy-btn.js" async></script>
+</body>
+</html>
